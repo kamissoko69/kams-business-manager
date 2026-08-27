@@ -1,16 +1,43 @@
 version: "3.8"
 
 services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: kams-business-manager-db
+    restart: always
+    environment:
+      POSTGRES_USER: kams_user
+      POSTGRES_PASSWORD: kams_password_secure
+      POSTGRES_DB: kams_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
   backend:
-    build: ./backend
+    build:
+      context: ./backend
+    container_name: kams-business-manager-backend
     ports:
       - "5000:5000"
     environment:
       - PORT=5000
+      - DB_HOST=postgres
+      - DB_USER=kams_user
+      - DB_PASSWORD=kams_password_secure
+      - DB_NAME=kams_db
+      - DB_PORT=5432
+    depends_on:
+      - postgres
 
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend
+    container_name: kams-business-manager-frontend
     ports:
       - "5173:5173"
     depends_on:
       - backend
+
+volumes:
+  postgres_data:

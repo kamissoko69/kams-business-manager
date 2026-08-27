@@ -5,10 +5,10 @@ function App() {
 
   useEffect(() => {
     // Connexion à notre API Backend (Port 5000)
-    fetch('http://localhost:5000/api/status')
-      .then((res) => res.json())
-      .then((data) => setApiStatus(`Connecté à l'API (${data.app} v${data.version})`))
-      .catch(() => setApiStatus('Erreur : Impossible de contacter l\'API Backend sur le port 5000'))
+    fetch('/api/status')
+    .then((res) => res.json())
+    .then((data) => setApiStatus(`Connecté à l'API (${data.app} v${data.version})`))
+    .catch(() => setApiStatus('Erreur : Impossible de contacter l\'API Backend'))
   }, [])
 
   return (
